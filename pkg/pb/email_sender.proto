@@ -1,0 +1,74 @@
+// Generated according to https://cloud.google.com/apis/design/standard_methods
+syntax = "proto3";
+
+package email_sender;
+
+import "pkg/pb/google/api/annotations.proto";
+
+option go_package = "pkg/pb";
+
+service EmailService {
+
+
+  rpc SendEmail(SendEmailRequest) returns (SendEmailResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/send"
+      body: "SendEmailRequest"
+    };
+  }
+
+  rpc SendBulkEmail(SendBulkEmailRequest) returns (SendBulkEmailResponse) {
+    option (google.api.http) = {
+      post: "/v1alpha1/send-bulk"
+      body: "SendBulkEmailRequest"
+    };
+  }
+
+}
+
+// message Email {
+// ! This should be defined elsewere
+// }
+
+message SendEmailRequest {
+  // The template to send
+  string Template = 1;
+  // Recipient Email
+  string Recipient = 2;
+  // Email Subject
+  string Subject = 3;
+  // Sender Email
+  string SenderEmail = 4;
+  // Sender Name
+  string SenderName = 5;
+}
+
+message SendEmailResponse {
+  // Success
+  int32 send = 1;
+
+  // Fails.
+  int32 fails = 2;
+}
+
+message SendBulkEmailRequest {
+  // The template to send
+  string Template = 1;
+  // Recipient Email
+  repeated string Recipients = 2;
+  // Email Subject
+  string Subject = 3;
+  // Sender Email
+  string SenderEmail = 4;
+  // Sender Name
+  string SenderName = 5;
+}
+
+message SendBulkEmailResponse {
+  // Success
+  int32 send = 1;
+
+  // Fails.
+  int32 fails = 2;
+}
+
