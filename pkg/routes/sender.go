@@ -9,7 +9,7 @@ import (
 	mail "github.com/xhit/go-simple-mail/v2"
 )
 
-func (config Smtp) Send(recipient string, from string, subject string, text string) bool {
+func (config Smtp) Send(recipient string, sender string, from string, subject string, text string) bool {
 
 	server := mail.NewSMTPClient()
 	server.Host = config.Host
@@ -25,7 +25,7 @@ func (config Smtp) Send(recipient string, from string, subject string, text stri
 
 	// Create email
 	email := mail.NewMSG()
-	email.SetFrom(from)
+	email.SetFrom(fmt.Sprintf("%s <%s>", sender, from))
 	email.AddTo(recipient)
 	email.AddCc(from)
 	email.SetSubject(subject)
@@ -44,7 +44,7 @@ func (config Smtp) Send(recipient string, from string, subject string, text stri
 }
 
 func (smtp Smtp) SendEmail(ctx context.Context, req *pb.SendEmailRequest) (*pb.SendEmailResponse, error) {
-	sent := smtp.Send(req.Recipient, req.SenderEmail, req.Subject, req.Template)
+	sent := smtp.Send(req.Recipient, req.SenderName, req.SenderEmail, req.Subject, req.Template)
 	if sent {
 		return &pb.SendEmailResponse{Send: 1, Fails: 0}, nil
 	}
@@ -56,7 +56,7 @@ func (smtp Smtp) SendEmail(ctx context.Context, req *pb.SendEmailRequest) (*pb.S
 func (smtp Smtp) SendBulkEmail(ctx context.Context, req *pb.SendBulkEmailRequest) (*pb.SendBulkEmailResponse, error) {
 	fails := 0
 	for x := 0; x < len(req.Recipients); x++ {
-		sent := smtp.Send(req.Recipients[x], req.SenderEmail, req.Subject, req.Template)
+		sent := smtp.Send(req.Recipients[x], req.SenderName, req.SenderEmail, req.Subject, req.Template)
 		if !sent {
 			fails++
 		}
