@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/lerryjay/auth-grpc-service/pkg/pb"
+	"github.com/lerryjay/email-service/pkg/pb"
 	"golang.org/x/net/context"
 )
 
