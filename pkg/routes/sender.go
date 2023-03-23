@@ -36,7 +36,7 @@ func (config Smtp) Send(recipient string, sender string, from string, subject st
 	// Send email
 	err = email.Send(smtpClient)
 	if err != nil {
-		log.Panicln("Send Mail Erro:", err)
+		log.Println("Send Mail Error:", err)
 		return false
 	}
 
